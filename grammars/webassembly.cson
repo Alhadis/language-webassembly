@@ -6,7 +6,8 @@ patterns: [include: "#main"]
 repository:
 	main:
 		patterns: [
-			{include: "#comment"}
+			{include: "#comment-line"}
+			{include: "#comment-block"}
 			{include: "#expression"}
 			{include: "#type"}
 			{include: "#op"}
@@ -17,13 +18,22 @@ repository:
 		]
 
 
-	# ;; Comment
-	comment:
+	# ;; Single-line comment
+	"comment-line":
 		name: "comment.line.semicolon.webassembly"
 		begin: ";;"
 		end:   "$"
 		beginCaptures:
 			0: name: "punctuation.definition.comment.webassembly"
+
+	# (; Multi-line ;)
+	"comment-block":
+		name: "comment.block.semicolon.webassembly"
+		begin: "\\(;"
+		end:   ";\\)"
+		beginCaptures: 0: name: "punctuation.section.comment.begin.webassembly"
+		endCaptures:   0: name: "punctuation.section.comment.end.webassembly"
+		patterns: [include: "#comment-block"]
 
 
 	# S-expression

@@ -1,3 +1,5 @@
+(; (; Nested ;) ;)
+
 (module
 	(import "console" "log" (func $log (param i32 i32)))
 	(import "js" "mem" (memory 1))
