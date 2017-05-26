@@ -1,6 +1,6 @@
 {
 	"name": "language-webassembly",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"description": "WebAssembly language support in Atom.",
 	"keywords": ["wasm", "wast", "wat", "WebAssembly"],
 	"repository": "https://github.com/Alhadis/language-webassembly",
