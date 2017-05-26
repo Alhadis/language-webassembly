@@ -6,5 +6,109 @@ patterns: [include: "#main"]
 repository:
 	main:
 		patterns: [
-			
+			{include: "#comment"}
+			{include: "#expression"}
+			{include: "#type"}
+			{include: "#op"}
+			{include: "#float"}
+			{include: "#int"}
+			{include: "#name"}
+			{include: "#string"}
 		]
+
+
+	# ;; Comment
+	comment:
+		name: "comment.line.semicolon.webassembly"
+		begin: ";;"
+		end:   "$"
+		beginCaptures:
+			0: name: "punctuation.definition.comment.webassembly"
+
+
+	# S-expression
+	expression:
+		patterns: [{
+			# Labelled node
+			name: "meta.expression.$2.webassembly"
+			begin: "(\\()\\s*(\\w+)(?=[\\s()]|$|;;)"
+			end:   "\\)"
+			beginCaptures:
+				1: name: "punctuation.section.expression.begin.webassembly"
+				2: name: "entity.name.function.webassembly"
+			endCaptures:
+				0: name: "punctuation.section.expression.end.webassembly"
+			patterns: [include: "$self"]
+		},{
+			name: "meta.expression.webassembly"
+			begin: "\\("
+			end:   "\\)"
+			beginCaptures: 0: name: "punctuation.section.expression.begin.webassembly"
+			endCaptures:   0: name: "punctuation.section.expression.end.webassembly"
+			patterns: [include: "$self"]
+		}]
+
+
+	# Floating point number
+	float:
+		match: "[-+]?\\d+\\.\\d+"
+		name: "constant.numeric.float.webassembly"
+
+
+	# Integer
+	int:
+		name: "constant.numeric.int.webassembly"
+		match: "[-+]?\\d+"
+
+
+	# $foo - Index label
+	name:
+		name: "variable.other.name.webassembly"
+		match: "(\\$)[-A-Za-z0-9_.+*/\\\\^~=<>!?@#$%&|:'`]+"
+		captures:
+			1: name: "punctuation.definition.variable.webassembly"
+
+	
+	# Op list
+	op:
+		name: "keyword.control.$1.webassembly"
+		match: """(?x) \\b
+			(br|br_if|br_table|call|call_indirect|current_memory|drop|get_global
+			|get_local|grow_memory|nop|return|select|set_global|set_local|tee_local
+			|unreachable)
+			(?=[\\s()]|$|;;)
+		"""
+
+
+	# Quoted string
+	string:
+		name: "string.quoted.double.webassembly"
+		begin: '"'
+		end:   '"'
+		beginCaptures: 0: name: "punctuation.definition.string.begin.webassembly"
+		endCaptures:   0: name: "punctuation.definition.string.end.webassembly"
+		patterns: [
+			{match: "\\\\n",   name: "constant.character.escape.newline.webassembly"}
+			{match: "\\\\t",   name: "constant.character.escape.tab.webassembly"}
+			{match: "\\\\{2}", name: "constant.character.escape.backslash.webassembly"}
+			{match: "\\\\'",   name: "constant.character.escape.quote.single.webassembly"}
+			{match: '\\\\"',   name: "constant.character.escape.quote.double.webassembly"}
+		]
+
+
+	type:
+		match: """(?x) \\b
+			(i32|i64|f32|f64)
+			(?:
+				(\\.)
+				(const|c[lt]z|popcnt|add|sub|mul|(?:extend|trunc)_[su]
+				|eq|ne|lt
+				|load((?:8|16|32)_[su])?
+				|store(?:8|16|32)?)
+				
+				| \\b
+			)"""
+		captures:
+			1: name: "storage.type.var.$1.webassembly"
+			2: name: "punctuation.separator.method.period.webassembly"
+			3: name: "entity.name.method-call.webassembly"
