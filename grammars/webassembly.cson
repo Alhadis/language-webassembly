@@ -93,6 +93,9 @@ repository:
 			{match: "\\\\{2}", name: "constant.character.escape.backslash.webassembly"}
 			{match: "\\\\'",   name: "constant.character.escape.quote.single.webassembly"}
 			{match: '\\\\"',   name: "constant.character.escape.quote.double.webassembly"}
+			
+			match: "\\\\[0-9A-Fa-f]{2}"
+			name: "constant.character.escape.hex.unicode.webassembly"
 		]
 
 
