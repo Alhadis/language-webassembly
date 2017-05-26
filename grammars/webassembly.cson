@@ -72,14 +72,14 @@ repository:
 
 	# Floating point number
 	float:
-		match: "[-+]?\\d+\\.\\d+"
 		name: "constant.numeric.float.webassembly"
+		match: "(?<!\\w)[-+]?\\d+\\.\\d+"
 
 
 	# Integer
 	int:
 		name: "constant.numeric.int.webassembly"
-		match: "[-+]?\\d+"
+		match: "(?<!\\w)[-+]?\\d+"
 
 
 	# $foo - Index label
@@ -129,6 +129,7 @@ repository:
 				|eq|ne|lt
 				|load((?:8|16|32)_[su])?
 				|store(?:8|16|32)?)
+				(?=[\\s()]|$|;;)
 				
 				| \\b
 			)"""
