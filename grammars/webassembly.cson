@@ -88,10 +88,10 @@ repository:
 			name: "keyword.control.$1.webassembly"
 			match: "\\b(block|br|br_if|br_table|else|end|export|if|loop|module|nop|return)(?=[\\s()]|$|;;)"
 		},{
-			name: "support.function.$1.webassembly"
+			name: "entity.name.function.$1.webassembly"
 			match: "(?x) \\b
-				(call|call_indirect|current_memory|drop|get_global|get_local|grow_memory
-				|return|select|set_global|set_local|tee_local|unreachable)
+				(call|call_indirect|current_memory|drop|func|[gs]et_(?:global|local)
+				|grow_memory|memory|module|param|return|select|tee_local|unreachable)
 				(?=[\\s()]|$|;;)"
 		}]
 
