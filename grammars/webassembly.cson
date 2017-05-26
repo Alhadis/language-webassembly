@@ -1,0 +1,10 @@
+name: "WebAssembly"
+scopeName: "source.webassembly"
+fileTypes: ["wast", "wat"]
+patterns: [include: "#main"]
+
+repository:
+	main:
+		patterns: [
+			
+		]
