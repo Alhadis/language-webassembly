@@ -10,7 +10,7 @@ repository:
 			{include: "#comment-block"}
 			{include: "#expression"}
 			{include: "#type"}
-			{include: "#op"}
+			{include: "#keywords"}
 			{include: "#float"}
 			{include: "#int"}
 			{include: "#name"}
@@ -82,6 +82,20 @@ repository:
 		match: "(?<!\\w)[-+]?\\d+"
 
 
+	# Textual language elements
+	keywords:
+		patterns: [{
+			name: "keyword.control.$1.webassembly"
+			match: "\\b(block|br|br_if|br_table|else|end|export|if|loop|module|nop|return)(?=[\\s()]|$|;;)"
+		},{
+			name: "support.function.$1.webassembly"
+			match: "(?x) \\b
+				(call|call_indirect|current_memory|drop|get_global|get_local|grow_memory
+				|return|select|set_global|set_local|tee_local|unreachable)
+				(?=[\\s()]|$|;;)"
+		}]
+
+
 	# $foo - Index label
 	name:
 		name: "variable.other.name.webassembly"
@@ -90,17 +104,6 @@ repository:
 			1: name: "punctuation.definition.variable.webassembly"
 
 	
-	# Op list
-	op:
-		name: "keyword.control.$1.webassembly"
-		match: """(?x) \\b
-			(br|br_if|br_table|call|call_indirect|current_memory|drop|get_global
-			|get_local|grow_memory|nop|return|select|set_global|set_local|tee_local
-			|unreachable)
-			(?=[\\s()]|$|;;)
-		"""
-
-
 	# Quoted string
 	string:
 		name: "string.quoted.double.webassembly"
@@ -121,19 +124,35 @@ repository:
 
 
 	type:
-		match: """(?x) \\b
-			(i32|i64|f32|f64)
-			(?:
-				(\\.)
-				(const|c[lt]z|popcnt|add|sub|mul|(?:extend|trunc)_[su]
-				|eq|ne|lt
-				|load((?:8|16|32)_[su])?
-				|store(?:8|16|32)?)
-				(?=[\\s()]|$|;;)
-				
-				| \\b
-			)"""
-		captures:
-			1: name: "storage.type.var.$1.webassembly"
-			2: name: "punctuation.separator.method.period.webassembly"
-			3: name: "entity.name.method-call.webassembly"
+		patterns: [{
+			# Integer operators
+			match: "\\b(i32|i64)(\\.)((?:div|rem|shr|[lg][et])_[su]|and|x?or|shl|rot[lr]|eqz)"
+			captures:
+				1: name: "storage.type.var.$1.webassembly"
+				2: name: "punctuation.separator.method.period.webassembly"
+				3: name: "entity.name.method-call.webassembly"
+		},{
+			# Floating-point operators
+			match: "\\b(f32|f64)(\\.)(div|abs|neg|copysign|ceil|floor|trunc|nearest|le|gt|ge|sqrt|min|max)"
+			captures:
+				1: name: "storage.type.var.$1.webassembly"
+				2: name: "punctuation.separator.method.period.webassembly"
+				3: name: "entity.name.method-call.webassembly"
+		},{
+			# Operators supported by either type
+			match: """(?x) \\b
+				(i32|i64|f32|f64)
+				(?=\\.|\\b)
+				(?:
+					(\\.)
+					(const|c[lt]z|popcnt|add|sub|mul|(?:extend|trunc)_[su]
+					|eq|ne|lt
+					|load((?:8|16|32)_[su])?
+					|store(?:8|16|32)?)
+					(?=[\\s()]|$|;;)
+				)? """
+			captures:
+				1: name: "storage.type.var.$1.webassembly"
+				2: name: "punctuation.separator.method.period.webassembly"
+				3: name: "entity.name.method-call.webassembly"
+		}]

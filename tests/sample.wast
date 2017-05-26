@@ -11,6 +11,8 @@
 unreachable
 
 
+(export "add" (func $add))
+
 (func (param i32) (param i32) (result f64))
 (func (param $p1 i32) (param $p2 f32) (local $loc i32))
 
