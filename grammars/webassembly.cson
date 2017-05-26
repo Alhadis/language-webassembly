@@ -39,6 +39,17 @@ repository:
 	# S-expression
 	expression:
 		patterns: [{
+			# Module / Top-level node
+			name: "meta.expression.module.root.webassembly"
+			begin: "(\\()\\s*(module)(?=[\\s()]|$|;;)"
+			end:   "\\)"
+			beginCaptures:
+				1: name: "punctuation.section.expression.begin.webassembly"
+				2: name: "keyword.control.module.webassembly"
+			endCaptures:
+				0: name: "punctuation.section.expression.end.webassembly"
+			patterns: [include: "$self"]
+		},{
 			# Labelled node
 			name: "meta.expression.$2.webassembly"
 			begin: "(\\()\\s*(\\w+)(?=[\\s()]|$|;;)"
