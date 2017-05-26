@@ -126,23 +126,50 @@ repository:
 	type:
 		patterns: [{
 			# Integer operators
-			match: "\\b(i32|i64)(\\.)((?:div|rem|shr|[lg][et])_[su]|and|x?or|shl|rot[lr]|eqz)"
+			match: """(?x)
+				\\b (i32|i64) (\\.)
+				(?:
+					((?:div|rem|shr|[lg][et])_[su]|and|x?or|shl|rot[lr]|eqz)
+					|
+					(
+						(?<=i32 \\.) (?:reinterpret|trunc_[su]|wrap) |
+						(?<=i64 \\.) (?:reinterpret|(?:extend|trunc)_[su])
+					)
+					(/) (i32|i64|f32|f64)
+				)
+			"""
 			captures:
 				1: name: "storage.type.var.$1.webassembly"
 				2: name: "punctuation.separator.method.period.webassembly"
 				3: name: "entity.name.method-call.webassembly"
+				4: name: "entity.name.method-call.webassembly"
+				5: name: "keyword.operator.datatype.webassembly"
+				6: name: "storage.type.var.$6.webassembly"
 		},{
 			# Floating-point operators
-			match: "\\b(f32|f64)(\\.)(div|abs|neg|copysign|ceil|floor|trunc|nearest|le|gt|ge|sqrt|min|max)"
+			match: """(?x)
+				\\b (f32|f64) (\\.)
+				(?:
+					(div|abs|neg|copysign|ceil|floor|trunc|nearest|le|gt|ge|sqrt|min|max)
+					|
+					(
+						(?<=f32 \\.)  (?:demote|convert_[su]|reinterpret) |
+						(?<=f64 \\.) (?:promote|convert_[su]|reinterpret)
+					)
+					(/) (i32|i64|f32|f64)
+				)
+			"""
 			captures:
 				1: name: "storage.type.var.$1.webassembly"
 				2: name: "punctuation.separator.method.period.webassembly"
 				3: name: "entity.name.method-call.webassembly"
+				4: name: "entity.name.method-call.webassembly"
+				5: name: "keyword.operator.datatype.webassembly"
+				6: name: "storage.type.var.$6.webassembly"
 		},{
-			# Operators supported by either type
+			# Operators supported by both integers and floating-points
 			match: """(?x) \\b
 				(i32|i64|f32|f64)
-				(?=\\.|\\b)
 				(?:
 					(\\.)
 					(const|c[lt]z|popcnt|add|sub|mul|(?:extend|trunc)_[su]
@@ -150,7 +177,9 @@ repository:
 					|load((?:8|16|32)_[su])?
 					|store(?:8|16|32)?)
 					(?=[\\s()]|$|;;)
-				)? """
+					
+					| \\b
+				)"""
 			captures:
 				1: name: "storage.type.var.$1.webassembly"
 				2: name: "punctuation.separator.method.period.webassembly"
