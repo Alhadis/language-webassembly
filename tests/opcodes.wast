@@ -43,85 +43,86 @@ end            ;; an instruction that m
 export
 call
 call_indirect
-i32.const      ;; produce the value of an i32 immediate
-i64.const      ;; produce the value of an i64 immediate
-f32.const      ;; produce the value of an f32 immediate
-f64.const      ;; produce the value of an f64 immediate
 
 
-i32.add        ;; sign-agnostic addition
-i32.sub        ;; sign-agnostic subtraction
-i32.mul        ;; sign-agnostic multiplication (lower 32-bits)
-i32.div_s      ;; signed division (result is truncated toward zero)
-i32.div_u      ;; unsigned division (result is floored)
-i32.rem_s      ;; signed remainder (result has the sign of the dividend)
-i32.rem_u      ;; unsigned remainder
-i32.and        ;; sign-agnostic bitwise and
-i32.or         ;; sign-agnostic bitwise inclusive or
-i32.xor        ;; sign-agnostic bitwise exclusive or
-i32.shl        ;; sign-agnostic shift left
-i32.shr_u      ;; zero-replicating (logical) shift right
-i32.shr_s      ;; sign-replicating (arithmetic) shift right
-i32.rotl       ;; sign-agnostic rotate left
-i32.rotr       ;; sign-agnostic rotate right
-i32.eq         ;; sign-agnostic compare equal
-i32.ne         ;; sign-agnostic compare unequal
-i32.lt_s       ;; signed less than
-i32.le_s       ;; signed less than or equal
-i32.lt_u       ;; unsigned less than
-i32.le_u       ;; unsigned less than or equal
-i32.gt_s       ;; signed greater than
-i32.ge_s       ;; signed greater than or equal
-i32.gt_u       ;; unsigned greater than
-i32.ge_u       ;; unsigned greater than or equal
-i32.clz        ;; sign-agnostic count leading zero bits (All zero bits are considered leading if the value is zero)
-i32.ctz        ;; sign-agnostic count trailing zero bits (All zero bits are considered trailing if the value is zero)
-i32.popcnt     ;; sign-agnostic count number of one bits
-i32.eqz        ;; compare equal to zero (return 1 if operand is zero, 0 otherwise)
+(;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;)
 
+i32.const            ;; produce the value of an i32 immediate
+i64.const            ;; produce the value of an i64 immediate
+f32.const            ;; produce the value of an f32 immediate
+f64.const            ;; produce the value of an f64 immediate
 
-f32.add        ;; addition
-f32.sub        ;; subtraction
-f32.mul        ;; multiplication
-f32.div        ;; division
-f32.abs        ;; absolute value
-f32.neg        ;; negation
-f32.copysign   ;; copysign
-f32.ceil       ;; ceiling operator
-f32.floor      ;; floor operator
-f32.trunc      ;; round to nearest integer towards zero
-f32.nearest    ;; round to nearest integer, ties to even
-f32.eq         ;; compare ordered and equal
-f32.ne         ;; compare unordered or unequal
-f32.lt         ;; compare ordered and less than
-f32.le         ;; compare ordered and less than or equal
-f32.gt         ;; compare ordered and greater than
-f32.ge         ;; compare ordered and greater than or equal
-f32.sqrt       ;; square root
-f32.min        ;; minimum (binary operator); if either operand is NaN, returns NaN
-f32.max        ;; m
+i32.add              ;; sign-agnostic addition
+i32.sub              ;; sign-agnostic subtraction
+i32.mul              ;; sign-agnostic multiplication (lower 32-bits)
+i32.div_s            ;; signed division (result is truncated toward zero)
+i32.div_u            ;; unsigned division (result is floored)
+i32.rem_s            ;; signed remainder (result has the sign of the dividend)
+i32.rem_u            ;; unsigned remainder
+i32.and              ;; sign-agnostic bitwise and
+i32.or               ;; sign-agnostic bitwise inclusive or
+i32.xor              ;; sign-agnostic bitwise exclusive or
+i32.shl              ;; sign-agnostic shift left
+i32.shr_u            ;; zero-replicating (logical) shift right
+i32.shr_s            ;; sign-replicating (arithmetic) shift right
+i32.rotl             ;; sign-agnostic rotate left
+i32.rotr             ;; sign-agnostic rotate right
+i32.eq               ;; sign-agnostic compare equal
+i32.ne               ;; sign-agnostic compare unequal
+i32.lt_s             ;; signed less than
+i32.le_s             ;; signed less than or equal
+i32.lt_u             ;; unsigned less than
+i32.le_u             ;; unsigned less than or equal
+i32.gt_s             ;; signed greater than
+i32.ge_s             ;; signed greater than or equal
+i32.gt_u             ;; unsigned greater than
+i32.ge_u             ;; unsigned greater than or equal
+i32.clz              ;; sign-agnostic count leading zero bits (All zero bits are considered leading if the value is zero)
+i32.ctz              ;; sign-agnostic count trailing zero bits (All zero bits are considered trailing if the value is zero)
+i32.popcnt           ;; sign-agnostic count number of one bits
+i32.eqz              ;; compare equal to zero (return 1 if operand is zero, 0 otherwise)
 
-f64.add        ;; addition
-f64.sub        ;; subtraction
-f64.mul        ;; multiplication
-f64.div        ;; division
-f64.abs        ;; absolute value
-f64.neg        ;; negation
-f64.copysign   ;; copysign
-f64.ceil       ;; ceiling operator
-f64.floor      ;; floor operator
-f64.trunc      ;; round to nearest integer towards zero
-f64.nearest    ;; round to nearest integer, ties to even
-f64.eq         ;; compare ordered and equal
-f64.ne         ;; compare unordered or unequal
-f64.lt         ;; compare ordered and less than
-f64.le         ;; compare ordered and less than or equal
-f64.gt         ;; compare ordered and greater than
-f64.ge         ;; compare ordered and greater than or equal
-f64.sqrt       ;; square root
-f64.min        ;; minimum (binary operator); if either operand is NaN, returns NaN
-f64.max
+f32.add              ;; addition
+f32.sub              ;; subtraction
+f32.mul              ;; multiplication
+f32.div              ;; division
+f32.abs              ;; absolute value
+f32.neg              ;; negation
+f32.copysign         ;; copysign
+f32.ceil             ;; ceiling operator
+f32.floor            ;; floor operator
+f32.trunc            ;; round to nearest integer towards zero
+f32.nearest          ;; round to nearest integer, ties to even
+f32.eq               ;; compare ordered and equal
+f32.ne               ;; compare unordered or unequal
+f32.lt               ;; compare ordered and less than
+f32.le               ;; compare ordered and less than or equal
+f32.gt               ;; compare ordered and greater than
+f32.ge               ;; compare ordered and greater than or equal
+f32.sqrt             ;; square root
+f32.min              ;; minimum (binary operator); if either operand is NaN, returns NaN
+f32.max              ;; maximum (binary operator); if either operand is NaN, returns NaN
 
+f64.add              ;; addition
+f64.sub              ;; subtraction
+f64.mul              ;; multiplication
+f64.div              ;; division
+f64.abs              ;; absolute value
+f64.neg              ;; negation
+f64.copysign         ;; copysign
+f64.ceil             ;; ceiling operator
+f64.floor            ;; floor operator
+f64.trunc            ;; round to nearest integer towards zero
+f64.nearest          ;; round to nearest integer, ties to even
+f64.eq               ;; compare ordered and equal
+f64.ne               ;; compare unordered or unequal
+f64.lt               ;; compare ordered and less than
+f64.le               ;; compare ordered and less than or equal
+f64.gt               ;; compare ordered and greater than
+f64.ge               ;; compare ordered and greater than or equal
+f64.sqrt             ;; square root
+f64.min              ;; minimum (binary operator); if either operand is NaN, returns NaN
+f64.max              ;; maximum (binary operator); if either operand is NaN, returns NaN
 
 i32.wrap/i64         ;; wrap a 64-bit integer to a 32-bit integer
 i32.trunc_s/f32      ;; truncate a 32-bit float to a signed 32-bit integer
