@@ -15,7 +15,17 @@ repository:
 			{include: "#int"}
 			{include: "#name"}
 			{include: "#string"}
+			{include: "#assignment"}
 		]
+
+
+	# Assignment (e.g.: offset=0 align=4)
+	assignment:
+		match: "(?<!\\w)(align|offset)(=)(\\d+)"
+		captures:
+			1: name: "variable.parameter.$1.webassembly"
+			2: name: "keyword.operator.assignment.webassembly"
+			3: patterns: [include: "#int"]
 
 
 	# ;; Single-line comment
