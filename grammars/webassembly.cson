@@ -122,6 +122,10 @@ repository:
 	# Numeric value
 	number:
 		patterns: [{
+			# Constants
+			name: "constant.language.$1.webassembly"
+			match: "(?<!\\w)[-+]?(inf|nan)(?!\\w)"
+		},{
 			# Floating-point: Hexadecimal
 			name: "constant.numeric.float.hex.webassembly"
 			match: "(?<!\\w)[-+]?0x[A-Fa-f0-9]+\\.[A-Fa-f0-9]+"
