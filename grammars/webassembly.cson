@@ -30,8 +30,7 @@ repository:
 			{include: "#expression"}
 			{include: "#type"}
 			{include: "#keywords"}
-			{include: "#float"}
-			{include: "#int"}
+			{include: "#number"}
 			{include: "#name"}
 			{include: "#string"}
 			{include: "#assignment"}
@@ -40,11 +39,10 @@ repository:
 
 	# Assignment (e.g.: offset=0 align=4)
 	assignment:
-		match: "(?<!\\w)(align|offset)(=)(\\d+)"
+		match: "(?<!\\w)(align|offset)(=)(?=[-+]?(?:\\d|0x[\\dA-Fa-f]))"
 		captures:
 			1: name: "variable.parameter.$1.webassembly"
 			2: name: "keyword.operator.assignment.webassembly"
-			3: patterns: [include: "#int"]
 
 
 	# ;; Single-line comment
@@ -99,18 +97,6 @@ repository:
 		}]
 
 
-	# Floating point number
-	float:
-		name: "constant.numeric.float.webassembly"
-		match: "(?<!\\w)[-+]?\\d+\\.\\d+"
-
-
-	# Integer
-	int:
-		name: "constant.numeric.int.webassembly"
-		match: "(?<!\\w)[-+]?\\d+"
-
-
 	# Textual language elements
 	keywords:
 		patterns: [{
@@ -131,6 +117,27 @@ repository:
 		match: "(\\$)[-A-Za-z0-9_.+*/\\\\^~=<>!?@#$%&|:'`]+"
 		captures:
 			1: name: "punctuation.definition.variable.webassembly"
+
+
+	# Numeric value
+	number:
+		patterns: [{
+			# Floating-point: Hexadecimal
+			name: "constant.numeric.float.hex.webassembly"
+			match: "(?<!\\w)[-+]?0x[A-Fa-f0-9]+\\.[A-Fa-f0-9]+"
+		},{
+			# Floating-point: Decimal
+			name: "constant.numeric.float.decimal.webassembly"
+			match: "(?<!\\w)[-+]?\\d+\\.\\d+"
+		},{
+			# Integer: Hexadecimal
+			name: "constant.numeric.int.hex.webassembly"
+			match: "(?<!\\w)[-+]?0x[A-Fa-f0-9]+"
+		},{
+			# Integer: Decimal
+			name: "constant.numeric.int.decimal.webassembly"
+			match: "(?<!\\w)[-+]?\\d+"
+		}]
 
 	
 	# Quoted string
