@@ -101,12 +101,14 @@ repository:
 	keywords:
 		patterns: [{
 			name: "keyword.control.$1.webassembly"
-			match: "\\b(block|br|br_if|br_table|else|end|export|if|loop|module|nop|return)(?=[\\s()]|$|;;)"
+			match: "\\b(block|br|br_if|br_table|else|end|export|if|import|loop|module|nop|return|then)(?=[\\s()]|$|;;)"
 		},{
 			name: "entity.name.function.$1.webassembly"
 			match: "(?x) \\b
-				(call|call_indirect|current_memory|drop|func|[gs]et_(?:global|local)
-				|grow_memory|memory|module|param|return|select|tee_local|unreachable)
+				(assert_(?:malformed|invalid|unlinkable|return(?:_(?:canonical|arithmetic)_nan)?|trap|exhaustion)
+				|binary|call|call_indirect|current_memory|data|drop|elem|func|get|[gs]et_(?:global|local)
+				|global|grow_memory|input|invoke|local|memory|module|offset|output|param|quote|register|result
+				|return|script|select|start|table|tee_local|type|unreachable)
 				(?=[\\s()]|$|;;)"
 		}]
 
@@ -169,7 +171,7 @@ repository:
 			match: """(?x)
 				\\b (i32|i64) (\\.)
 				(?:
-					((?:div|rem|shr|[lg][et])_[su]|and|x?or|shl|rot[lr]|eqz)
+					((?:div|rem|shr|[lg][et])_[su]|and|c[lt]z|x?or|shl|rot[lr]|eqz|popcnt)
 					|
 					(
 						(?<=i32 \\.) (?:reinterpret|trunc_[su]|wrap) |
@@ -190,7 +192,7 @@ repository:
 			match: """(?x)
 				\\b (f32|f64) (\\.)
 				(?:
-					(div|abs|neg|copysign|ceil|floor|trunc|nearest|le|gt|ge|sqrt|min|max)
+					(div|abs|neg|copysign|ceil|floor|trunc|nearest|le|lt|gt|ge|sqrt|min|max)
 					|
 					(
 						(?<=f32 \\.)  (?:demote|convert_[su]|reinterpret) |
@@ -212,8 +214,7 @@ repository:
 				(i32|i64|f32|f64)
 				(?:
 					(\\.)
-					(const|c[lt]z|popcnt|add|sub|mul|(?:extend|trunc)_[su]
-					|eq|ne|lt
+					(const|add|sub|mul|(?:extend|trunc)_[su]|eq|ne
 					|load((?:8|16|32)_[su])?
 					|store(?:8|16|32)?)
 					(?=[\\s()]|$|;;)
