@@ -33,16 +33,8 @@ repository:
 			{include: "#number"}
 			{include: "#name"}
 			{include: "#string"}
-			{include: "#assignment"}
+			{include: "#optional-immediate"}
 		]
-
-
-	# Assignment (e.g.: offset=0 align=4)
-	assignment:
-		match: "(?<!\\w)(align|offset)(=)(?=[-+]?(?:\\d|0x[\\dA-Fa-f]))"
-		captures:
-			1: name: "variable.parameter.$1.webassembly"
-			2: name: "keyword.operator.assignment.webassembly"
 
 
 	# ;; Single-line comment
@@ -214,6 +206,14 @@ repository:
 			name: "constant.numeric.int.decimal.webassembly"
 			match: "(?<!\\w)[-+]?\\d+"
 		}]
+
+
+	# Optional immediate following load/store operators (e.g.: offset=0 align=4)
+	"optional-immediate":
+		match: "(?<!\\w)(align|offset)(=)(?=[-+]?(?:\\d|0x[\\dA-Fa-f]))"
+		captures:
+			1: name: "variable.parameter.$1.webassembly"
+			2: name: "keyword.operator.assignment.webassembly"
 
 	
 	# Quoted string
