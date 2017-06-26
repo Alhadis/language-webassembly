@@ -230,8 +230,11 @@ repository:
 			{match: "\\\\'",   name: "constant.character.escape.quote.single.webassembly"}
 			{match: '\\\\"',   name: "constant.character.escape.quote.double.webassembly"}
 			
-			match: "\\\\[0-9A-Fa-f]{2}"
+			match: "\\\\[0-9A-Fa-f]{2}|\\\\u({)[A-Fa-f0-9]+(})"
 			name: "constant.character.escape.hex.unicode.webassembly"
+			captures:
+				1: name: "punctuation.definition.unicode-escape.begin.bracket.curly.webassembly"
+				2: name: "punctuation.definition.unicode-escape.end.bracket.curly.webassembly"
 		]
 
 

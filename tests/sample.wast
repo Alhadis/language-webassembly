@@ -1,3 +1,8 @@
+;; Strings
+
+"String \n"
+"Unicode \u{AF0} Escape"
+
 ;; Comment
 
 (module
