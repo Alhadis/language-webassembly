@@ -29,7 +29,7 @@ repository:
 			{include: "#comment-block"}
 			{include: "#expression"}
 			{include: "#type"}
-			{include: "#keywords"}
+			{include: "#instructions"}
 			{include: "#number"}
 			{include: "#name"}
 			{include: "#string"}
@@ -97,19 +97,77 @@ repository:
 		}]
 
 
-	# Textual language elements
-	keywords:
+	# Instruction keywords
+	instructions:
 		patterns: [{
-			name: "keyword.control.$1.webassembly"
-			match: "\\b(block|br|br_if|br_table|else|end|export|if|import|loop|module|nop|return|then)(?=[\\s()]|$|;;)"
+			# Control instructions
+			name: "keyword.control.instruction.$1.webassembly"
+			match: """(?x) \\b
+				( block
+				| br
+				| br_if
+				| br_table
+				| call
+				| call_indirect
+				| else
+				| if
+				| end
+				| export
+				| loop
+				| return
+				| then
+				) (?=[\\s()]|$|;;)"""
 		},{
-			name: "entity.name.function.$1.webassembly"
-			match: "(?x) \\b
-				(assert_(?:malformed|invalid|unlinkable|return(?:_(?:canonical|arithmetic)_nan)?|trap|exhaustion)
-				|binary|call|call_indirect|current_memory|data|drop|elem|func|get|[gs]et_(?:global|local)
-				|global|grow_memory|input|invoke|local|memory|module|offset|output|param|quote|register|result
-				|return|script|select|start|table|tee_local|type|unreachable)
-				(?=[\\s()]|$|;;)"
+			# Declarations
+			name: "keyword.operator.declaration.instruction.$1.webassembly"
+			match: """(?x) \\b
+				( func
+				| global
+				| import
+				| local
+				| module
+				| param
+				| table
+				| type
+				) (?=[\\s()]|$|;;)"""
+		},{
+			# WAST script
+			name: "entity.name.function.scripting.instruction.$1.webassembly"
+			match: """(?x) \\b
+				( assert_exhaustion
+				| assert_invalid
+				| assert_malformed
+				| assert_return (?:_(?:arithmetic|canonical)_nan)?
+				| assert_trap
+				| assert_unlinkable
+				| get
+				| [gs]et_(?:global|local)
+				| input
+				| invoke
+				| output
+				| register
+				| script
+				) (?=[\\s()]|$|;;)"""
+		},{
+			# Everything else
+			name: "entity.name.function.misc.instruction.$1.webassembly"
+			match: """(?x) \\b
+				( binary
+				| current_memory
+				| data
+				| drop
+				| elem
+				| grow_memory
+				| memory
+				| nop
+				| offset
+				| quote
+				| result
+				| select
+				| start
+				| tee_local
+				| unreachable
+				) (?=[\\s()]|$|;;)"""
 		}]
 
 
@@ -225,4 +283,9 @@ repository:
 				1: name: "storage.type.var.$1.webassembly"
 				2: name: "punctuation.separator.method.period.webassembly"
 				3: name: "entity.name.method-call.webassembly"
+		},{
+			# Other types
+			match: "\\b(anyfunc)\\b"
+			captures:
+				1: name: "storage.type.var.$1.webassembly"
 		}]
