@@ -121,12 +121,18 @@ repository:
 			# Declarations
 			name: "keyword.operator.declaration.instruction.$1.webassembly"
 			match: """(?x) \\b
-				( func
+				( data
+				| elem
+				| func
 				| global
 				| import
 				| local
+				| memory
 				| module
+				| offset
 				| param
+				| result
+				| start
 				| table
 				| type
 				) (?=[\\s()]|$|;;)"""
@@ -140,11 +146,12 @@ repository:
 				| assert_return (?:_(?:arithmetic|canonical)_nan)?
 				| assert_trap
 				| assert_unlinkable
+				| binary
 				| get
-				| [gs]et_(?:global|local)
 				| input
 				| invoke
 				| output
+				| quote
 				| register
 				| script
 				) (?=[\\s()]|$|;;)"""
@@ -152,19 +159,12 @@ repository:
 			# Everything else
 			name: "entity.name.function.misc.instruction.$1.webassembly"
 			match: """(?x) \\b
-				( binary
-				| current_memory
-				| data
+				( current_memory
 				| drop
-				| elem
+				| [gs]et_(?:global|local)
 				| grow_memory
-				| memory
 				| nop
-				| offset
-				| quote
-				| result
 				| select
-				| start
 				| tee_local
 				| unreachable
 				) (?=[\\s()]|$|;;)"""
