@@ -182,17 +182,29 @@ repository:
 	# Numeric value
 	number:
 		patterns: [{
+			# NaN constant with payload
+			name: "constant.language.nan.with-payload.webassembly"
+			match: "(?<!\\w)[-+]?nan(:)(0x[A-Fa-f0-9]+)"
+			captures:
+				1: name: "punctuation.separator.payload.colon.webassembly"
+				2: name: "constant.numeric.int.hex.payload.webassembly"
+		},{
 			# Constants
 			name: "constant.language.$1.webassembly"
 			match: "(?<!\\w)[-+]?(inf|nan)(?!\\w)"
 		},{
 			# Floating-point: Hexadecimal
 			name: "constant.numeric.float.hex.webassembly"
-			match: "(?<!\\w)[-+]?0x[A-Fa-f0-9]+\\.[A-Fa-f0-9]+"
+			match: """(?x) (?<!\\w)
+				[-+]?
+				0x [A-Fa-f0-9]+
+				(?: \\.[A-Fa-f0-9]* )?
+				(?: [pP][-+]?[0-9]+ )?
+			"""
 		},{
 			# Floating-point: Decimal
 			name: "constant.numeric.float.decimal.webassembly"
-			match: "(?<!\\w)[-+]?\\d+\\.\\d+"
+			match: "(?<!\\w)[-+]?\\d+(?:\\.\\d*)?(?:[eE][-+]?[0-9]+)?"
 		},{
 			# Integer: Hexadecimal
 			name: "constant.numeric.int.hex.webassembly"
