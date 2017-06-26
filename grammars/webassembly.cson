@@ -290,10 +290,8 @@ repository:
 					(const|add|sub|mul|(?:extend|trunc)_[su]|eq|ne
 					|load((?:8|16|32)_[su])?
 					|store(?:8|16|32)?)
-					(?=[\\s()]|$|;;)
-					
-					| \\b
-				)"""
+				)?
+				(?=[\\s()]|$|;;)"""
 			captures:
 				1: name: "storage.type.var.$1.webassembly"
 				2: name: "punctuation.separator.method.period.webassembly"
