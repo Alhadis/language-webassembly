@@ -6,6 +6,12 @@ This project honours [Semantic Versioning](http://semver.org).
 [Staged]: https://github.com/Alhadis/language-webassembly/compare/v1.1.0...HEAD
 
 
+[Staged]
+------------------------------------------------------------------------
+* __Added:__ Comment highlighting for interpreter directives (hashbangs)
+
+
+
 [v1.1.0]
 ------------------------------------------------------------------------
 **June 27th, 2017**  

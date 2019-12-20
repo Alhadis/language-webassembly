@@ -4,7 +4,7 @@ fileTypes: ["wast", "wat"]
 firstLineMatch: """(?x)
 	# Hashbang
 	^\\#!.*(?:\\s|\\/|(?<=!)\\b)
-		(?:wasm|wast)
+		(?:wasm(?:time)?|wast)
 	(?:$|\\s)
 	|
 	# Modeline
@@ -20,7 +20,14 @@ firstLineMatch: """(?x)
 		(?=\\s|:|$)
 	)
 """
-patterns: [include: "#main"]
+patterns: [{
+	# Interpreter directive
+	name:  "comment.line.hashbang.webassembly"
+	begin: "\\A(#!)"
+	end:   "$"
+	beginCaptures:
+		1: name: "punctuation.definition.comment.hashbang.webassembly"
+}, include: "#main"]
 
 repository:
 	main:
