@@ -3,13 +3,15 @@ Change Log
 
 This project honours [Semantic Versioning](http://semver.org).
 
-[Staged]: https://github.com/Alhadis/language-webassembly/compare/v1.1.0...HEAD
+[Staged]: https://github.com/Alhadis/language-webassembly/compare/v1.1.1...HEAD
 
 
-[Staged]
+[v1.1.1]
 ------------------------------------------------------------------------
+**December 20th, 2019**  
 * __Added:__ Comment highlighting for interpreter directives (hashbangs)
 
+[v1.1.1]: https://github.com/Alhadis/language-webassembly/releases/tag/v1.1.1
 
 
 [v1.1.0]
