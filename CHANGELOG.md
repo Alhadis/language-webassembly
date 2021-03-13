@@ -6,6 +6,13 @@ This project honours [Semantic Versioning](http://semver.org).
 [Staged]: https://github.com/Alhadis/language-webassembly/compare/v1.1.1...HEAD
 
 
+[Staged]
+------------------------------------------------------------------------
+* __Fixed:__ [Various inaccuracies][1] related to modeline recognition
+
+[1]: https://github.com/github/linguist/pull/5271
+
+
 [v1.1.1]
 ------------------------------------------------------------------------
 **December 20th, 2019**  
