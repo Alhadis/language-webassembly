@@ -4,7 +4,7 @@ fileTypes: ["wast", "wat"]
 firstLineMatch: """(?x)
 	# Hashbang
 	^\\#!.*(?:\\s|\\/|(?<=!)\\b)
-		(?:wasm(?:time)?|wast)
+		(?:wasm(?:3|time|-interp|-shell)?|wast)
 	(?:$|\\s)
 	|
 	# Modeline
