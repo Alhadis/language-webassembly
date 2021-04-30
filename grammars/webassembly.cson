@@ -38,6 +38,7 @@ repository:
 			{include: "#comment-block"}
 			{include: "#expression"}
 			{include: "#type"}
+			{include: "#simd"}
 			{include: "#instructions"}
 			{include: "#number"}
 			{include: "#name"}
@@ -225,6 +226,54 @@ repository:
 			2: name: "keyword.operator.assignment.webassembly"
 
 	
+	# SIMD instructions
+	simd:
+		patterns: [{
+			match: """(?x)
+				\\b (v128)
+				(?:
+					(\\.)
+					(andnot|and|any_true|bitselect|const|not|x?or|store(?:(?:8|16|32|64)_lane)?
+					|load(?:(?:8x8|16x4|32x2)_[su]|(8|16|32|64)_(lane|splat|((?<=32_|64_)zero)))?)
+				)? (?=[\\s()]|$|;;)
+			"""
+			captures:
+				1: name: "storage.type.var.simd.$1.webassembly"
+				2: name: "punctuation.separator.method.period.webassembly"
+				3: name: "entity.name.method-call.webassembly"
+		},{
+			match: """(?x)
+				\\b (f32x4|f64x2)
+				(?:
+					(\\.)
+					(abs|add|ceil|convert_(low_)?i32x4_[su]|div|eq|extract_lane|floor|[gl][et]|p?max|p?min|mul|nearest
+					|neg?|replace_lane|splat|sqrt|sub|trunc|(?<=f32x4.)demote_f64x2_zero|(?<=f64x2.)promote_low_f32x4)
+				)? (?=[\\s()]|$|;;)
+			"""
+			captures:
+				1: name: "storage.type.var.simd.$1.webassembly"
+				2: name: "punctuation.separator.method.period.webassembly"
+				3: name: "entity.name.method-call.webassembly"
+		},{
+			match: """(?x)
+				\\b (i8x16|i16x8|i32x4|i64x2)
+				(?:
+					(\\.)
+					( abs|add|all_true|avgr_u|bitmask|eq|neg?|replace_lane|shl|splat|sub|(?:(?:add|sub)_sat|extract_lane|[gl][et]|max|min|shr)_[su]
+					| (?<=i8x16.) (?:narrow_i16x8_[su]|popcnt|shuffle|swizzle)
+					| (?<=i16x8.) (?:mul|narrow_i32x4_[su]|q15mulr_sat_s|(?:extadd_pairwise|ext(?:end|mul)_(?:high|low))_i8x16_[su])
+					| (?<=i32x4.) (?:dot_i16x8_s|extract_lane|mul|trunc_sat_(?:f32x4_[su]|f64x2_[su]_zero)|(?:extadd_pairwise|ext(?:end(?:_low)?|mul))(?:_(?:high|low))?_i16x8_[su])
+					| (?<=i64x2.) (?:extract_lane|mul|ext(?:end|mul)_(?:high|low)_i32x4_[su])
+					)
+				)? (?=[\\s()]|$|;;)
+			"""
+			captures:
+				1: name: "storage.type.var.simd.$1.webassembly"
+				2: name: "punctuation.separator.method.period.webassembly"
+				3: name: "entity.name.method-call.webassembly"
+		}]
+
+
 	# Quoted string
 	string:
 		name: "string.quoted.double.webassembly"

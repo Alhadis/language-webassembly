@@ -8,9 +8,11 @@ This project honours [Semantic Versioning](http://semver.org).
 
 [Staged]
 ------------------------------------------------------------------------
+* __Added:__ Support for [SIMD instructions][2]
 * __Fixed:__ [Various inaccuracies][1] related to modeline recognition
 
 [1]: https://github.com/github/linguist/pull/5271
+[2]: https://webassembly.github.io/simd/core/appendix/index-instructions.html
 
 
 [v1.1.1]
