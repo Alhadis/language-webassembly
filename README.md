@@ -3,7 +3,7 @@ WebAssembly language support
 
 Syntax highlighting support for WebAssembly's textual representation (`.wast` and `.wat` files).
 
-<img src="preview.png" width="800" />
+![Highlighting preview](https://raw.githubusercontent.com/Alhadis/language-webassembly/master/preview.png)
 
 
 Related links
