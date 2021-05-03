@@ -37,9 +37,8 @@ repository:
 			{include: "#comment-line"}
 			{include: "#comment-block"}
 			{include: "#expression"}
-			{include: "#type"}
-			{include: "#simd"}
 			{include: "#instructions"}
+			{include: "#type"}
 			{include: "#number"}
 			{include: "#name"}
 			{include: "#string"}
@@ -68,34 +67,22 @@ repository:
 	# S-expression
 	expression:
 		patterns: [{
-			# Module / Top-level node
-			name: "meta.expression.module.root.webassembly"
-			begin: "(\\()\\s*(module)(?=[\\s()]|$|;;)"
-			end:   "\\)"
-			beginCaptures:
-				1: name: "punctuation.section.expression.begin.webassembly"
-				2: name: "keyword.control.module.webassembly"
-			endCaptures:
-				0: name: "punctuation.section.expression.end.webassembly"
-			patterns: [include: "$self"]
-		},{
-			# Labelled node
 			name: "meta.expression.$2.webassembly"
-			begin: "(\\()\\s*(\\w+)(?=[\\s()]|$|;;)"
+			begin: "(\\()(\\w+)(?=[\\s()]|$|;;)"
 			end:   "\\)"
 			beginCaptures:
 				1: name: "punctuation.section.expression.begin.webassembly"
-				2: name: "entity.name.function.webassembly"
+				2: patterns: [include: "#main"]
 			endCaptures:
 				0: name: "punctuation.section.expression.end.webassembly"
-			patterns: [include: "$self"]
+			patterns: [include: "#main"] 
 		},{
 			name: "meta.expression.webassembly"
 			begin: "\\("
 			end:   "\\)"
 			beginCaptures: 0: name: "punctuation.section.expression.begin.webassembly"
 			endCaptures:   0: name: "punctuation.section.expression.end.webassembly"
-			patterns: [include: "$self"]
+			patterns: [include: "#main"] 
 		}]
 
 
@@ -106,31 +93,274 @@ repository:
 			name: "keyword.control.instruction.$1.webassembly"
 			match: """(?x) \\b
 				( block
-				| br
-				| br_if
-				| br_table
-				| call
-				| call_indirect
+				| br(?:_if|_table|_on_(?:cast|data|func|i31|null))?
+				| call(?:_indirect|_ref)?
+				| catch_all
+				| catch
+				| delegate
 				| else
-				| if
 				| end
-				| export
+				| if
 				| loop
-				| return
+				| nop
+				| rethrow
+				| return(?:_call(?:_indirect|_ref)?)?
 				| then
+				| throw
+				| try
+				| unreachable
+				| unwind
 				) (?=[\\s()]|$|;;)"""
 		},{
+			# Numeric and SIMD instructions
+			name: "entity.name.function.instruction.$1.webassembly"
+			match: """(?x) \\b
+				(
+					(f32|f64) \\.
+					( (?<=f32.) (demote_f64|reinterpret_i32)
+					| (?<=f64.) (promote_f32|reinterpret_i64)
+					| abs
+					| add
+					| atomic (?:\\.\\w+)++
+					| ceil
+					| const
+					| convert_i(32|64)_[su]
+					| copysign
+					| div
+					| eq
+					| floor
+					| [gl][et]
+					| load
+					| max
+					| min
+					| mul
+					| nearest
+					| neg?
+					| ne
+					| sqrt
+					| store
+					| sub
+					| trunc
+					)
+					|
+					
+					(i32|i64) \\.
+					( (?<=i32.) (reinterpret_f32|wrap_i64)
+					| (?<=i64.) (extend_i32_[su]|extend32_s|load32_[su]|reinterpret_f64|store32)
+					| add
+					| and
+					| atomic (?:\\.\\w+)++
+					| clz
+					| const
+					| ctz
+					| div_[su]
+					| eqz?
+					| eq
+					| extend(8|16)_s
+					| [gl][et]_[su]
+					| load(8|16)_[su]
+					| load
+					| mul
+					| ne
+					| x?or
+					| popcnt
+					| rem_[su]
+					| rot[lr]
+					| shl
+					| shr_[su]
+					| store(8|16)?
+					| sub
+					| trunc_(sat_)?f(32|64)_[su]
+					)
+					|
+					
+					v128 \\.
+					( andnot
+					| and
+					| any_true
+					| atomic (?:\\.\\w+)++
+					| bitselect
+					| const
+					| load((8|16)_lane|(32|64)_(lane|zero))?
+					| not
+					| x?or
+					| store((8|16|32|64)_lane)?
+					)
+					|
+				
+					(f32x4|f64x2) \\.
+					( (?<=f32x4.) (convert_i32x4_[su]|demote_f64x2_zero)
+					| (?<=f64x2.) (convert_low_i32x4_[su]|promote_low_f32x4)
+					| abs
+					| add
+					| ceil
+					| div
+					| eq
+					| (extract|replace)_lane
+					| floor
+					| [gl][et]
+					| p?max
+					| p?min
+					| mul
+					| nearest
+					| neg?
+					| splat
+					| sqrt
+					| sub
+					| trunc
+					)
+					|
+					
+					i8x16 \\.
+					( abs
+					| (?:add|sub)_sat_[su]
+					| add
+					| all_true
+					| avgr_u
+					| bitmask
+					| eq
+					| extract_lane_[su]
+					| [gl][et]_[su]
+					| load_splat
+					| max_[su]
+					| min_[su]
+					| narrow_i16x8_[su]
+					| neg?
+					| ne
+					| popcnt
+					| replace_lane
+					| shl
+					| shr_[su]
+					| shuffle
+					| splat
+					| sub
+					| swizzle
+					)
+					|
+					
+					i16x8 \\.
+					( abs
+					| (?:add|sub)_sat_[su]
+					| add
+					| all_true
+					| avgr_u
+					| bitmask
+					| eq
+					| ext(add_pairwise|(end|mul)_(high|low))_i8x16_[su]
+					| extract_lane_[su]
+					| [gl][et]_[su]
+					| load8x8_[su]
+					| load_splat
+					| max_[su]
+					| min_[su]
+					| mul
+					| narrow_i32x4_[su]
+					| neg?
+					| ne
+					| q15mulr_sat_s
+					| replace_lane
+					| shl
+					| shr_[su]
+					| splat
+					| sub
+					)
+					|
+
+					i32x4 \\.
+					( abs
+					| add
+					| all_true
+					| bitmask
+					| dot_i16x8_s
+					| eq
+					| ext(add_pairwise|(end|mul)_(high|low))_i16x8_[su]
+					| extract_lane
+					| [gl][et]_[su]
+					| load16x4_[su]
+					| load_splat
+					| max_[su]
+					| min_[su]
+					| mul
+					| neg?
+					| ne
+					| replace_lane
+					| shl
+					| shr_[su]
+					| splat
+					| sub
+					| trunc_sat_f32x4_[su]
+					| trunc_sat_f64x2_[su]_zero
+					)
+					|
+
+					i64x2 \\.
+					( abs
+					| add
+					| all_true
+					| bitmask
+					| eq
+					| ext(end|mul)_(high|low)_i32x4_[su]
+					| extract_lane
+					| [gl][et]_s
+					| load32x2_[su]
+					| load_splat
+					| mul
+					| neg?
+					| ne
+					| replace_lane
+					| shl
+					| shr_[su]
+					| splat
+					| sub
+					)
+				) (?=[\\s()]|$|;;)
+			"""
+			captures:
+				1: patterns: [{
+					name: "punctuation.separator.method.period.webassembly"
+					match: "\\."
+				}]
+		},{
+			# Everything else
+			name: "entity.name.function.instruction.$1.webassembly"
+			match: """(?x)
+				( (array|struct) (\\. (len|new(_default)?_with_rtt|get_[su]|[gs]et))?
+				| current_memory
+				| data\\.drop
+				| drop
+				| elem\\.drop
+				| field
+				| i31 \\. (new|get_[su])
+				| global\\.[gs]et
+				| local\\.([gs]et|tee)
+				| memory\\.(atomic\\.(notify|wait32|wait64)|copy|fill|grow|init|size)
+				| ref(\\.([ai]s_(data|func|i31|non_null)|cast|eq|func|is_null|null|test))?
+				| rtt(\\.(canon|sub))?
+				| select
+				| table\\.(copy|fill|get|grow|init|set|size)
+				) (?=[\\s()]|$|;;)"""
+			captures:
+				1: patterns: [{
+					name: "punctuation.separator.method.period.webassembly"
+					match: "\\."
+				}]
+		},{
 			# Declarations
-			name: "keyword.operator.declaration.instruction.$1.webassembly"
+			name: "storage.type.$1.webassembly"
 			match: """(?x) \\b
 				( data
+				| declare
 				| elem
+				| export
+				| extern
 				| func
 				| global
 				| import
+				| item
 				| local
 				| memory
 				| module
+				| mut
 				| offset
 				| param
 				| result
@@ -140,7 +370,7 @@ repository:
 				) (?=[\\s()]|$|;;)"""
 		},{
 			# WAST script
-			name: "entity.name.function.scripting.instruction.$1.webassembly"
+			name: "support.function.scripting.webassembly"
 			match: """(?x) \\b
 				( assert_exhaustion
 				| assert_invalid
@@ -149,27 +379,21 @@ repository:
 				| assert_trap
 				| assert_unlinkable
 				| binary
-				| get
 				| input
 				| invoke
+				| get
 				| output
 				| quote
+				| ref\\.extern
+				| ref\\.host
 				| register
 				| script
 				) (?=[\\s()]|$|;;)"""
-		},{
-			# Everything else
-			name: "entity.name.function.misc.instruction.$1.webassembly"
-			match: """(?x) \\b
-				( current_memory
-				| drop
-				| [gs]et_(?:global|local)
-				| grow_memory
-				| nop
-				| select
-				| tee_local
-				| unreachable
-				) (?=[\\s()]|$|;;)"""
+			captures:
+				1: patterns: [{
+					name: "punctuation.separator.method.period.webassembly"
+					match: "\\."
+				}]
 		}]
 
 
@@ -228,54 +452,6 @@ repository:
 			1: name: "variable.parameter.$1.webassembly"
 			2: name: "keyword.operator.assignment.webassembly"
 
-	
-	# SIMD instructions
-	simd:
-		patterns: [{
-			match: """(?x)
-				\\b (v128)
-				(?:
-					(\\.)
-					(andnot|and|any_true|bitselect|const|not|x?or|store(?:(?:8|16|32|64)_lane)?
-					|load(?:(?:8x8|16x4|32x2)_[su]|(8|16|32|64)_(lane|splat|((?<=32_|64_)zero)))?)
-				)? (?=[\\s()]|$|;;)
-			"""
-			captures:
-				1: name: "storage.type.var.simd.$1.webassembly"
-				2: name: "punctuation.separator.method.period.webassembly"
-				3: name: "entity.name.method-call.webassembly"
-		},{
-			match: """(?x)
-				\\b (f32x4|f64x2)
-				(?:
-					(\\.)
-					(abs|add|ceil|convert_(low_)?i32x4_[su]|div|eq|extract_lane|floor|[gl][et]|p?max|p?min|mul|nearest
-					|neg?|replace_lane|splat|sqrt|sub|trunc|(?<=f32x4.)demote_f64x2_zero|(?<=f64x2.)promote_low_f32x4)
-				)? (?=[\\s()]|$|;;)
-			"""
-			captures:
-				1: name: "storage.type.var.simd.$1.webassembly"
-				2: name: "punctuation.separator.method.period.webassembly"
-				3: name: "entity.name.method-call.webassembly"
-		},{
-			match: """(?x)
-				\\b (i8x16|i16x8|i32x4|i64x2)
-				(?:
-					(\\.)
-					( abs|add|all_true|avgr_u|bitmask|eq|neg?|replace_lane|shl|splat|sub|(?:(?:add|sub)_sat|extract_lane|[gl][et]|max|min|shr)_[su]
-					| (?<=i8x16.) (?:narrow_i16x8_[su]|popcnt|shuffle|swizzle)
-					| (?<=i16x8.) (?:mul|narrow_i32x4_[su]|q15mulr_sat_s|(?:extadd_pairwise|ext(?:end|mul)_(?:high|low))_i8x16_[su])
-					| (?<=i32x4.) (?:dot_i16x8_s|extract_lane|mul|trunc_sat_(?:f32x4_[su]|f64x2_[su]_zero)|(?:extadd_pairwise|ext(?:end(?:_low)?|mul))(?:_(?:high|low))?_i16x8_[su])
-					| (?<=i64x2.) (?:extract_lane|mul|ext(?:end|mul)_(?:high|low)_i32x4_[su])
-					)
-				)? (?=[\\s()]|$|;;)
-			"""
-			captures:
-				1: name: "storage.type.var.simd.$1.webassembly"
-				2: name: "punctuation.separator.method.period.webassembly"
-				3: name: "entity.name.method-call.webassembly"
-		}]
-
 
 	# Quoted string
 	string:
@@ -298,68 +474,16 @@ repository:
 				2: name: "punctuation.definition.unicode-escape.end.bracket.curly.webassembly"
 		]
 
-
+	
+	# Types
 	type:
 		patterns: [{
-			# Integer operators
-			match: """(?x)
-				\\b (i32|i64) (\\.)
-				(?:
-					((?:div|rem|shr|[lg][et])_[su]|and|c[lt]z|x?or|shl|rot[lr]|eqz|popcnt)
-					|
-					(
-						(?<=i32 \\.) (?:reinterpret|trunc_[su]|wrap) |
-						(?<=i64 \\.) (?:reinterpret|(?:extend|trunc)_[su])
-					)
-					(/) (i32|i64|f32|f64)
-				)
-			"""
-			captures:
-				1: name: "storage.type.var.$1.webassembly"
-				2: name: "punctuation.separator.method.period.webassembly"
-				3: name: "entity.name.method-call.webassembly"
-				4: name: "entity.name.method-call.webassembly"
-				5: name: "keyword.operator.datatype.webassembly"
-				6: name: "storage.type.var.$6.webassembly"
+			name: "storage.type.number.$1.webassembly"
+			match: "\\b([if](?:32|64)|v128)(?=[\\s()]|$|;;)"
 		},{
-			# Floating-point operators
-			match: """(?x)
-				\\b (f32|f64) (\\.)
-				(?:
-					(div|abs|neg|copysign|ceil|floor|trunc|nearest|le|lt|gt|ge|sqrt|min|max)
-					|
-					(
-						(?<=f32 \\.)  (?:demote|convert_[su]|reinterpret) |
-						(?<=f64 \\.) (?:promote|convert_[su]|reinterpret)
-					)
-					(/) (i32|i64|f32|f64)
-				)
-			"""
-			captures:
-				1: name: "storage.type.var.$1.webassembly"
-				2: name: "punctuation.separator.method.period.webassembly"
-				3: name: "entity.name.method-call.webassembly"
-				4: name: "entity.name.method-call.webassembly"
-				5: name: "keyword.operator.datatype.webassembly"
-				6: name: "storage.type.var.$6.webassembly"
+			name: "storage.type.simd.$1.webassembly"
+			match: "\\b(f32x4|f64x2|i8x16|i16x8|i32x4|i64x2)(?=[\\s()]|$|;;)"
 		},{
-			# Operators supported by both integers and floating-points
-			match: """(?x) \\b
-				(i32|i64|f32|f64)
-				(?:
-					(\\.)
-					(const|add|sub|mul|(?:extend|trunc)_[su]|eq|ne
-					|load((?:8|16|32)_[su])?
-					|store(?:8|16|32)?)
-				)?
-				(?=[\\s()]|$|;;)"""
-			captures:
-				1: name: "storage.type.var.$1.webassembly"
-				2: name: "punctuation.separator.method.period.webassembly"
-				3: name: "entity.name.method-call.webassembly"
-		},{
-			# Other types
-			match: "\\b(anyfunc)\\b"
-			captures:
-				1: name: "storage.type.var.$1.webassembly"
+			name: "storage.type.reference.$1.webassembly"
+			match: "\\b(funcref|externref)(?=[\\s()]|$|;;)"
 		}]
