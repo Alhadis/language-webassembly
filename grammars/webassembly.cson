@@ -186,7 +186,7 @@ repository:
 		patterns: [{
 			# NaN constant with payload
 			name: "constant.language.nan.with-payload.webassembly"
-			match: "(?<!\\w)[-+]?nan(:)(0x[A-Fa-f0-9]+)"
+			match: "(?<!\\w)[-+]?nan(:)(0x(?!_)(?:_?[A-Fa-f0-9])+)"
 			captures:
 				1: name: "punctuation.separator.payload.colon.webassembly"
 				2: name: "constant.numeric.int.hex.payload.webassembly"
@@ -198,23 +198,26 @@ repository:
 			# Floating-point: Hexadecimal
 			name: "constant.numeric.float.hex.webassembly"
 			match: """(?x) (?<!\\w)
-				[-+]?
-				0x [A-Fa-f0-9]+
-				(?: \\.[A-Fa-f0-9]* )?
-				(?: [pP][-+]?[0-9]+ )?
+				[-+]? 0x      (?!_)(?:_? [A-Fa-f0-9])++
+				(?: \\.       (?!_)(?:_? [A-Fa-f0-9])*+ )?
+				(?: [pP][-+]? (?!_)(?:_? [0-9])++ )?
 			"""
 		},{
 			# Floating-point: Decimal
 			name: "constant.numeric.float.decimal.webassembly"
-			match: "(?<!\\w)[-+]?\\d+(?:\\.\\d*)?(?:[eE][-+]?[0-9]+)?"
+			match: """(?x) (?<!\\w)
+				[-+]?         (?!_)(?:_? \\d)++
+				(?: \\.       (?!_)(?:_? \\d)*+ )?
+				(?: [eE][-+]? (?!_)(?:_? \\d)++ )?
+			"""
 		},{
 			# Integer: Hexadecimal
 			name: "constant.numeric.int.hex.webassembly"
-			match: "(?<!\\w)[-+]?0x[A-Fa-f0-9]+"
+			match: "(?<!\\w)[-+]?0x(?!_)(?:_?[A-Fa-f0-9])++"
 		},{
 			# Integer: Decimal
 			name: "constant.numeric.int.decimal.webassembly"
-			match: "(?<!\\w)[-+]?\\d+"
+			match: "(?<!\\w)[-+]?(?!_)(?:_?\\d)++"
 		}]
 
 
