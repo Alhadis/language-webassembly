@@ -321,16 +321,25 @@ repository:
 					match: "\\."
 				}]
 		},{
+			# Old(?) numeric instructions
+			match: "\\b([if](?:32|64)(\\.)\\w+)(/)([if](?:32|64))"
+			captures:
+				1: name: "entity.name.function.instruction.$1.webassembly"
+				2: name: "punctuation.separator.method.period.webassembly"
+				3: name: "punctuation.separator.method.slash.webassembly"
+				4: patterns: [include: "#type"]
+		},{
 			# Everything else
 			name: "entity.name.function.instruction.$1.webassembly"
-			match: """(?x)
+			match: """(?x) \\b
 				( (array|struct) (\\. (len|new(_default)?_with_rtt|get_[su]|[gs]et))?
-				| current_memory
+				| (current|grow)_memory
 				| data\\.drop
 				| drop
 				| elem\\.drop
 				| field
 				| i31 \\. (new|get_[su])
+				| ([gs]et|tee)_(local|global)
 				| global\\.[gs]et
 				| local\\.([gs]et|tee)
 				| memory\\.(atomic\\.(notify|wait32|wait64)|copy|fill|grow|init|size)
@@ -348,8 +357,10 @@ repository:
 			# Declarations
 			name: "storage.type.$1.webassembly"
 			match: """(?x) \\b
-				( data
+				( anyfunc
+				| data
 				| declare
+				| element
 				| elem
 				| export
 				| extern
@@ -479,11 +490,11 @@ repository:
 	type:
 		patterns: [{
 			name: "storage.type.number.$1.webassembly"
-			match: "\\b([if](?:32|64)|v128)(?=[\\s()]|$|;;)"
+			match: "\\b([if](?:32|64)|v128|i8|i16)(?=[\\s()]|$|;;)"
 		},{
 			name: "storage.type.simd.$1.webassembly"
 			match: "\\b(f32x4|f64x2|i8x16|i16x8|i32x4|i64x2)(?=[\\s()]|$|;;)"
 		},{
 			name: "storage.type.reference.$1.webassembly"
-			match: "\\b(funcref|externref)(?=[\\s()]|$|;;)"
+			match: "\\b((?:any|data|eq|extern|func|i31)ref)(?=[\\s()]|$|;;)"
 		}]
