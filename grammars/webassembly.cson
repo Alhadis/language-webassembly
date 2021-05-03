@@ -181,7 +181,7 @@ repository:
 					| atomic (?:\\.\\w+)++
 					| bitselect
 					| const
-					| load((8|16)_lane|(32|64)_(lane|zero))?
+					| load((8|16)_lane|(32|64)_(lane|zero)|(8|16|32|64)_splat|(8x8|16x4|32x2)_[su])?
 					| not
 					| x?or
 					| store((8|16|32|64)_lane)?
