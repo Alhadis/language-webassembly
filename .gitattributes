@@ -1,2 +1,7 @@
 /tests/ export-ignore
 /preview.png export-ignore
+
+# Fix language classification on GitHub.com
+*.cson linguist-detectable
+*.wast linguist-documentation
+*.wat  linguist-documentation
