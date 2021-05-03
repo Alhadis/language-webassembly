@@ -3,17 +3,19 @@ Change Log
 
 This project honours [Semantic Versioning](http://semver.org).
 
-[Staged]: https://github.com/Alhadis/language-webassembly/compare/v1.1.1...HEAD
+[Staged]: https://github.com/Alhadis/language-webassembly/compare/v1.2.0...HEAD
 
 
-[Staged]
+[v1.2.0]
 ------------------------------------------------------------------------
+**May 4th, 2021**  
 * __Added:__ Support for [SIMD instructions][2]
 * __Added:__ Support for `nan:arithmetic` and `nan:canonical` constants
 * __Added:__ Support for numeric separators
 * __Fixed:__ Missing highlighting for certain instruction names
 * __Fixed:__ [Various inaccuracies][1] related to modeline recognition
 
+[v1.2.0]: https://github.com/Alhadis/language-webassembly/releases/tag/v1.2.0
 [1]: https://github.com/github/linguist/pull/5271
 [2]: https://webassembly.github.io/simd/core/appendix/index-instructions.html
 
