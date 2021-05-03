@@ -9,6 +9,8 @@ This project honours [Semantic Versioning](http://semver.org).
 [Staged]
 ------------------------------------------------------------------------
 * __Added:__ Support for [SIMD instructions][2]
+* __Added:__ Support for `nan:arithmetic` and `nan:canonical` constants
+* __Added:__ Support for numeric separators
 * __Fixed:__ [Various inaccuracies][1] related to modeline recognition
 
 [1]: https://github.com/github/linguist/pull/5271
