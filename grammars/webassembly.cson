@@ -64,6 +64,12 @@ repository:
 		patterns: [include: "#comment-block"]
 
 
+	# Repeated punctuation
+	dot:
+		name: "punctuation.separator.method.period.webassembly"
+		match: "\\."
+	
+
 	# S-expression
 	expression:
 		patterns: [{
@@ -93,7 +99,7 @@ repository:
 			name: "keyword.control.instruction.$1.webassembly"
 			match: """(?x) \\b
 				( block
-				| br(?:_if|_table|_on_(?:cast|data|func|i31|null))?
+				| br(?:_if|_table|_on_(?:cast(?:_fail)?|data|func|i31|(?:non_)?null))?
 				| call(?:_indirect|_ref)?
 				| catch_all
 				| catch
@@ -106,8 +112,8 @@ repository:
 				| rethrow
 				| return(?:_call(?:_indirect|_ref)?)?
 				| then
-				| throw
-				| try
+				| throw(?:_ref)?
+				| try(?:_table)?
 				| unreachable
 				| unwind
 				) (?=[\\s()]|$|;;)"""
@@ -146,7 +152,7 @@ repository:
 					
 					(i32|i64) \\.
 					( (?<=i32.) (reinterpret_f32|wrap_i64)
-					| (?<=i64.) (extend_i32_[su]|extend32_s|load32_[su]|reinterpret_f64|store32)
+					| (?<=i64.) (extend_i32_[su]|extend32_s|load32_[su]|reinterpret_f64|store32|add128|sub128|mul_wide_[su])
 					| add
 					| and
 					| atomic (?:\\.\\w+)++
@@ -204,6 +210,7 @@ repository:
 					| mul
 					| nearest
 					| neg?
+					| relaxed_(madd|max|min|nmadd)
 					| splat
 					| sqrt
 					| sub
@@ -228,6 +235,7 @@ repository:
 					| neg?
 					| ne
 					| popcnt
+					| relaxed_(laneselect|swizzle)
 					| replace_lane
 					| shl
 					| shr_[su]
@@ -258,6 +266,7 @@ repository:
 					| neg?
 					| ne
 					| q15mulr_sat_s
+					| relaxed_(dot_i8x16_i7x16_s|laneselect|q15mulr_s)
 					| replace_lane
 					| shl
 					| shr_[su]
@@ -283,6 +292,7 @@ repository:
 					| mul
 					| neg?
 					| ne
+					| relaxed_(dot_i8x16_i7x16_add_s|laneselect|trunc_(f32x4|f64x2)_[su])
 					| replace_lane
 					| shl
 					| shr_[su]
@@ -307,6 +317,7 @@ repository:
 					| mul
 					| neg?
 					| ne
+					| relaxed_laneselect
 					| replace_lane
 					| shl
 					| shr_[su]
@@ -316,43 +327,62 @@ repository:
 				) (?=[\\s()]|$|;;)
 			"""
 			captures:
-				1: patterns: [{
-					name: "punctuation.separator.method.period.webassembly"
-					match: "\\."
-				}]
+				1: patterns: [include: "#dot"]
 		},{
 			# Old(?) numeric instructions
 			match: "\\b([if](?:32|64)(\\.)\\w+)(/)([if](?:32|64))"
 			captures:
 				1: name: "entity.name.function.instruction.$1.webassembly"
-				2: name: "punctuation.separator.method.period.webassembly"
+				2: patterns: [include: "#dot"]
 				3: name: "punctuation.separator.method.slash.webassembly"
 				4: patterns: [include: "#type"]
+		},{
+			# Composite type instructions
+			name: "entity.name.function.instruction.$1.webassembly"
+			match: """(?x) \\b
+				(?:array|struct)
+				(?:
+					(\\.)
+					( len
+					| new
+						( _data
+						| _default (?:_with_rtt)?
+						| _elem
+						| _fixed
+						| _with_rtt
+						)?
+					| get_[su]
+					| [gs]et
+					| copy
+					| fill
+					| (?<=array\\.) init_(data|elem)
+					)
+				) (?=[\\s()]|$|;;)"""
+			captures:
+				1: patterns: [include: "#dot"]
 		},{
 			# Everything else
 			name: "entity.name.function.instruction.$1.webassembly"
 			match: """(?x) \\b
-				( (array|struct) (\\. (len|new(_default)?_with_rtt|get_[su]|[gs]et))?
+				( any\\.convert_extern
 				| (current|grow)_memory
 				| data\\.drop
 				| drop
 				| elem\\.drop
+				| extern\\.convert_any
 				| field
 				| i31 \\. (new|get_[su])
 				| ([gs]et|tee)_(local|global)
 				| global\\.[gs]et
 				| local\\.([gs]et|tee)
 				| memory\\.(atomic\\.(notify|wait32|wait64)|copy|fill|grow|init|size)
-				| ref(\\.([ai]s_(data|func|i31|non_null)|cast|eq|func|is_null|null|test))?
+				| ref(\\.([ai]s_(data|func|i31|non_null)|cast|eq|func|i31|is_null|null|test))
 				| rtt(\\.(canon|sub))?
 				| select
 				| table\\.(copy|fill|get|grow|init|set|size)
 				) (?=[\\s()]|$|;;)"""
 			captures:
-				1: patterns: [{
-					name: "punctuation.separator.method.period.webassembly"
-					match: "\\."
-				}]
+				1: patterns: [include: "#dot"]
 		},{
 			# Declarations
 			name: "storage.type.$1.webassembly"
@@ -369,6 +399,7 @@ repository:
 				| import
 				| item
 				| local
+				| mem
 				| memory
 				| module
 				| mut
@@ -377,6 +408,7 @@ repository:
 				| result
 				| start
 				| table
+				| tag
 				| type
 				) (?=[\\s()]|$|;;)"""
 		},{
@@ -401,10 +433,7 @@ repository:
 				| script
 				) (?=[\\s()]|$|;;)"""
 			captures:
-				1: patterns: [{
-					name: "punctuation.separator.method.period.webassembly"
-					match: "\\."
-				}]
+				1: patterns: [include: "#dot"]
 		}]
 
 
@@ -490,11 +519,32 @@ repository:
 	type:
 		patterns: [{
 			name: "storage.type.number.$1.webassembly"
-			match: "\\b([if](?:32|64)|v128|i8|i16)(?=[\\s()]|$|;;)"
+			match: "\\b([if](?:32|64))(?=[\\s()]|$|;;)"
+		},{
+			name: "storage.type.packed.$1.webassembly"
+			match: "\\b(i8|i16)(?=[\\s()]|$|;;)"
+		},{
+			name: "storage.type.vector.$1.webassembly"
+			match: "\\b(v128)(?=[\\s()]|$|;;)"
+		},{
+			name: "storage.type.heap.$1.webassembly"
+			match: "\\b(noexn|nofunc|noextern|none|func|extern|any|eq|i31|struct|array|exn)(?=[\\s()]|$|;;)"
+		},{
+			name: "storage.type.reference.$1.webassembly"
+			match: "\\b(?:((?:any|data|eq|extern|func|i31|struct|array|exn|null(?:func|exn|extern)?)?ref))(?=[\\s()]|$|;;)"
+		},{
+			match: "(?<=ref)(?<!\\wref)\\s+(null)(?=[\\s()]|$|;;)"
+			captures:
+				1: name: "storage.modifier.reference.nullable.webassembly"
+		},{
+			match: "\\b(sub)(?:\\s+(final))?(?=[\\s()]|$|;;)"
+			captures:
+				1: name: "storage.type.sub.webassembly"
+				2: name: "storage.modifier.final.webassembly"
+		},{
+			name: "storage.type.recursive.$1.webassembly"
+			match: "\\b(rec)(?=[\\s()]|$|;;)"
 		},{
 			name: "storage.type.simd.$1.webassembly"
 			match: "\\b(f32x4|f64x2|i8x16|i16x8|i32x4|i64x2)(?=[\\s()]|$|;;)"
-		},{
-			name: "storage.type.reference.$1.webassembly"
-			match: "\\b((?:any|data|eq|extern|func|i31)ref)(?=[\\s()]|$|;;)"
 		}]
